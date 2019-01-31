@@ -30,7 +30,10 @@
  *
  */
 function getFizzBuzz(num) {
-    throw new Error('Not implemented');
+    if ((num % 3 === 0) && (num % 5 === 0)) {return 'FizzBuzz';}
+    if (num % 3 === 0) {return 'Fizz';}
+    if (num % 5 === 0) {return 'Buzz';}
+    return num.toString();
 }
 
 
@@ -46,7 +49,8 @@ function getFizzBuzz(num) {
  *   10 => 3628800
  */
 function getFactorial(n) {
-    throw new Error('Not implemented');
+    if (n === 0) {return 1;}
+    return n * getFactorial(n - 1);
 }
 
 
@@ -63,7 +67,11 @@ function getFactorial(n) {
  *   -1,1  =>  0  ( = -1 + 0 + 1 )
  */
 function getSumBetweenNumbers(n1, n2) {
-    throw new Error('Not implemented');
+    var result = 0;
+    for (var i = n1; i <= n2 ; i ++) {
+      result += i;
+    }
+    return result;
 }
 
 
@@ -82,7 +90,7 @@ function getSumBetweenNumbers(n1, n2) {
  *   10,10,10 =>  true
  */
 function isTriangle(a,b,c) {
-    throw new Error('Not implemented');
+    return ((a + b > c) && (a + c > b) && (b + c > a));
 }
 
 
@@ -119,7 +127,12 @@ function isTriangle(a,b,c) {
  *  
  */
 function doRectanglesOverlap(rect1, rect2) {
-    throw new Error('Not implemented');
+    var overlapsFirstRectTop = (rect1.top <=  rect2.top + rect2.width) && (rect1.top >= rect2.top);
+    var overlapsFirstRectLeft = (rect1.left <=  rect2.left + rect2.height) && (rect1.left >= rect2.left);
+    var overlapsSecondRectTop = (rect2.top <=  rect1.top + rect1.width) && (rect2.top >= rect1.top);
+    var overlapsSecondRectLeft = (rect2.left <=  rect1.left + rect1.height) && (rect2.left >= rect1.left);
+
+    return (overlapsFirstRectTop && overlapsFirstRectLeft) || (overlapsSecondRectTop && overlapsSecondRectLeft);
 }
 
 
@@ -150,7 +163,8 @@ function doRectanglesOverlap(rect1, rect2) {
  *   
  */
 function isInsideCircle(circle, point) {
-    throw new Error('Not implemented');
+    return (Math.pow(point.x - circle.center.x,2) + Math.pow(point.y - circle.center.y,2) < circle.radius * circle.radius);
+
 }
 
 
@@ -166,7 +180,12 @@ function isInsideCircle(circle, point) {
  *   'entente' => null
  */
 function findFirstSingleChar(str) {
-    throw new Error('Not implemented');
+    for(var i of str) {
+        if (str.indexOf(i) === str.lastIndexOf(i)) {
+            return i;
+        }
+    }
+    return null;
 }
 
 
@@ -192,7 +211,7 @@ function findFirstSingleChar(str) {
  *
  */
 function getIntervalString(a, b, isStartIncluded, isEndIncluded) {
-    throw new Error('Not implemented');
+    return `${isStartIncluded ? '[' : '('}${Math.min(a, b)}, ${Math.max(a, b)}${isEndIncluded ? ']' : ')'}`
 }
 
 
@@ -209,7 +228,11 @@ function getIntervalString(a, b, isStartIncluded, isEndIncluded) {
  * 'noon' => 'noon'
  */
 function reverseString(str) {
-    throw new Error('Not implemented');
+    var result = '';
+    for (var i of str) {
+        result = i + result;
+    };
+    return result;
 }
 
 
@@ -226,7 +249,7 @@ function reverseString(str) {
  *   34143 => 34143
  */
 function reverseInteger(num) {
-    throw new Error('Not implemented');
+    return Number.parseInt(reverseString(num.toString()));
 }
 
 
@@ -251,7 +274,21 @@ function reverseInteger(num) {
  *   4916123456789012 => false
  */
 function isCreditCardNumber(ccn) {
-    throw new Error('Not implemented');
+    ccn = ccn.toString();
+    var result = 0;
+    var alternate = false;
+    for (var i = ccn.length - 1; i >= 0; i--) {
+        let n = Number.parseInt(ccn[i]);
+        if (alternate) {
+            n *= 2;
+            if (n > 9) {
+                n = (n % 10) + 1;
+            }
+        }
+        result += n;
+        alternate = !alternate;
+    }
+    return (result % 10 === 0);
 }
 
 
@@ -270,7 +307,15 @@ function isCreditCardNumber(ccn) {
  *   165536 (1+6+5+5+3+6 = 26,  2+6 = 8) => 8
  */
 function getDigitalRoot(num) {
-    throw new Error('Not implemented');
+    var result = 0;
+    num = num.toString();
+    for (var i of num) {
+        result += Number.parseInt(i);
+    }
+    if (result.toString().length === 1) {
+        return result;
+    }
+    return getDigitalRoot(result);
 }
 
 
@@ -296,7 +341,21 @@ function getDigitalRoot(num) {
  *   '{[(<{[]}>)]}' = true 
  */
 function isBracketsBalanced(str) {
-    throw new Error('Not implemented');
+    var openBrackets    = ['[','(','{','<'];
+    var closedBrackets  = [']',')','}','>'];
+    var oddLength = str.length % 2 === 1;
+    var isClosed = x => closedBrackets.includes(x);
+    var isOpen =  x => openBrackets.includes(x);
+    if (str == '') return true;
+    if (isClosed(str[0]) || oddLength || isOpen([str[str.length - 1]])) return false;
+    for (var i = 0; i < str.length; i++) {
+        if (isOpen(str[i]) && isClosed(str[i + 1])) {
+            if (openBrackets.indexOf(str[i]) != closedBrackets.indexOf(str[i + 1])) {
+                return false;
+            }
+        }
+    }
+    return true;
 }
 
 
@@ -332,7 +391,25 @@ function isBracketsBalanced(str) {
  *
  */
 function timespanToHumanString(startDate, endDate) {
-    throw new Error('Not implemented');
+    var difArr = [
+        { difference : 45000,       message : x => 'a few seconds ago'},
+        { difference : 90000,       message : x => 'a minute ago'},
+        { difference : 2700000,     message : x => `${Math.round((x - 1) / 60000)} minutes ago`},
+        { difference : 5400000,     message : x => 'an hour ago'},
+        { difference : 79200000,    message : x => `${Math.round((x - 1) / 3600000)} hours ago`},
+        { difference : 129600000,   message : x => 'a day ago'},
+        { difference : 2160000000,  message : x => `${Math.round((x - 1) / 86400000)} days ago`},
+        { difference : 3888000000,  message : x => 'a month ago'},
+        { difference : 29808000000, message : x => `${Math.round((x - 1) / 2592000000)} months ago`},
+        { difference : 47088000000, message : x => 'a year ago'}
+    ];
+    var diffBetween = endDate - startDate;
+    for (var diff of difArr) {
+        if (diffBetween <= diff.difference) {
+            return diff.message(diffBetween);
+        }
+    }
+    return `${Math.round((diffBetween - 1) / 31536000000)} years ago`
 }
 
 
