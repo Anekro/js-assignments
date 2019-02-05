@@ -429,11 +429,17 @@ function timespanToHumanString(startDate, endDate) {
  *   6561, 3  => '100000000'
  *    365, 2  => '101101101'
  *    365, 3  => '111112'
- *    365, 4  => '11231'
+ *    365, 4  => '11231'.
  *    365, 10 => '365'
  */
 function toNaryString(num, n) {
-    throw new Error('Not implemented');
+    var result = '';
+    while (num > 0) {
+        result = num % n === 0 ? '0' + result : (num % n).toString() + result;
+        num -= num % n;
+        num /= n;
+    }
+    return result;
 }
 
 
@@ -450,7 +456,21 @@ function toNaryString(num, n) {
  *   ['/web/favicon.ico', '/web-scripts/dump', '/webalizer/logs'] => '/'
  */
 function getCommonDirectoryPath(pathes) {
-    throw new Error('Not implemented');
+    var result = '';
+    var arr = pathes.map(x => x.split('/'));
+    var minLength = pathes.reduce((acc, value) => value.length < acc ? acc = value.length : acc, pathes[0].length);
+    var isEquals = true;
+    for (var i = 0; i < minLength; i++) {
+        for (var j = 0; j < arr.length - 1; j++) {
+            isEquals = isEquals && (arr[j][i] === arr[j + 1][i]);
+        }
+        if (isEquals) {
+            result += arr[0][i] + '/';
+        } else {
+            break;
+        }        
+    }
+    return result;
 }
 
 
@@ -473,7 +493,18 @@ function getCommonDirectoryPath(pathes) {
  *
  */
 function getMatrixProduct(m1, m2) {
-    throw new Error('Not implemented');
+    var result = [];
+    for (var i = 0; i < m1.length; i++) result[i] = [];
+    for (var i = 0; i < m1.length; i++) {
+        for (var j = 0; j < m2[0].length; j++) {
+            let sum = 0;
+            for ( var k = 0; k < m2.length; k++) {
+                sum += (m1[i][k] * m2[k][j]);
+            }
+            result[i][j] = sum;
+        }
+    }
+    return result;
 }
 
 
@@ -508,7 +539,27 @@ function getMatrixProduct(m1, m2) {
  *
  */
 function evaluateTicTacToePosition(position) {
-    throw new Error('Not implemented');
+    const X = 'XXX';
+    const O = '000';
+    var result = '';
+
+    var isLinearWin = (i) => position[i].join('') === X || position[i].join('') === O ? position[i][0] : ''; 
+
+    var columnString = (i) => position[0][i] + position[1][i] + position[2][i];
+    var isColumnWin = (i) => columnString(i) === X || columnString(i) === O ? position[0][i] : '';
+
+    var diagString = position.reduce((acc, value, index) => acc += value[index],'') + ' ' + position.reduce((acc, value, index) => acc += value[2 - index],'');
+    var isDiagonalWin = () => diagString.includes(X) || diagString.includes(O) ? (diagString.indexOf(X) > -1 ? diagString[diagString.indexOf(X)] : diagString[diagString.indexOf(O)]) : '';
+
+    for (var i = 0; i < 3; i++) {
+        result += isLinearWin(i) + isColumnWin(i);
+    }
+    result += isDiagonalWin();
+    if (result.length > 0) {
+        return result;
+    } else {
+        return undefined;
+    }
 }
 
 
